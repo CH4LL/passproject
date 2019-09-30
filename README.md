@@ -18,10 +18,10 @@ the features:
       - Open command line for windows
       - Open Notepad for Windows
       - Log out back to the login panel
-future features:
-  - In the control panel:
-    - display logged in users
-    - allow for instant communication (chat) between users (integrated with AJAX)
-    - display old conversations with the selected user
+  - Not fully implemented
+    - In the control panel:
+      - display logged in users
+      - allow for instant communication (chat) between users (integrated with AJAX)
+      - display old conversations with the selected user
     
 This app has been created for practice in the offline environment and is not suitable for use outside of it.
