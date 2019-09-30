@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to our website{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="/public/subpages/loginform.css">
+{% endblock %}
+
+{% block body %}
+<main>
+    <section class="main-section control-panel-main center-content">
+        <a class="choice-button" href="/public/user/control-panel/notepad">Open Notepad</a>
+        <a class="choice-button" href="/public/user/control-panel/shutdown">Shutdown the system</a>
+        <a class="choice-button" href="/public/user/control-panel/logout">Log Out</a>
+    </section>
+    <textarea class="main-section log-display" rows="10" readonly>
+{% if response is defined %}
+{% if response == 200 %}
+{{ data_logs_1 }}
+{{ data_logs_2 }}
+{{ data_logs_3 }}
+{{ data_logs_4 }}
+{{ data_logs_5 }}
+{{ data_logs_6 }}
+{{ data_logs_7 }}
+{{ data_logs_8 }}
+{{ data_logs_9 }}
+{{ data_logs_10 }}
+{% elseif response == 404 %}
+            The log File could not be found, a new one has been created
+{% endif %}
+{% endif %}
+    </textarea>
+</main>
+<button class="fa fa-comments top-left-fixed chat-icons" id="chat-open-icon"></button>
+<form class="top-left-fixed center-content" id="chat-form" method="POST">
+    <div class="chat-form-header-box">
+        <div class="message-div">Hello {{ username }}</div>
+        <div class="chat-form-header-buttons center-content">
+            <button class="fa fa-user chat-icons" id="chat-open-contacts"></button>
+            <button class="fa fa-times chat-icons" id="chat-close-icon"></button>
+        </div>
+    </div>
+    <div class="chat-form-content-box" id="chat-content-box">
+         {# Twig calling PHP function to display all known users in collumn as divs #}
+    </div>
+    <div class="chat-form-response-box">
+        <input class="chat-reply-content" placeholder="write your message..." id="reply_content" form="chat-form"></input>
+        <input type="hidden" form="chat-form" id="sender_username" value={{ username }}></input>
+        <input type="hidden" form="chat-form" id="receiver_username" value="root"></input>
+        <button class="fa fa-reply chat-icons" id="chat-reply-button" form="chat-form" type="submit"></button>
+    </div>
+</form>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        
+        let formId = document.getElementById("chat-form");
+        let openIcon = document.getElementById("chat-open-icon");
+        openIcon.addEventListener("click", openChatForm);
+        document.getElementById("chat-close-icon").addEventListener("click", closeChatForm);
+        {# document.getElementById("chat-open-contacts").addEventListener("click", openContacts); #}
+        document.getElementById("chat-reply-button").addEventListener("click", sendReply);
+        {# let receiver = ""; #}
+        function openChatForm(){
+            event.preventDefault();
+            formId.style.visibility = "visible";
+            openIcon.style.visibility = "hidden";
+        }
+        function closeChatForm(){
+            event.preventDefault();
+            formId.style.visibility = "hidden";
+            openIcon.style.visibility = "visible";
+        }
+        {# function openContacts(){
+            receiver = "root";          +this.responseText
+        } #}
+        function sendReply(){
+            event.preventDefault();
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST","/public/user/control-panel/reply",true);                               
+            xhr.onload = function(){ 
+                if (this.status == 200){
+                    // alert("request completed with the response: ");
+                    // let jsonFile = JSON.parse(this.responseText);
+                    // alert(jsonFile.sender+" should have displayed sender value");
+                    // alert(this.responseText);
+                    // let jsonFile = this.responseText;
+                    // alert(jsonFile.sender+" should have displayed sender value");
+                    console.log("the xhr request has finished");
+                    // alert(this.responseText);
+                }
+                else
+                    alert("request failed");
+            }
+                        // FormData Method
+                                    //let credentials = new FormData();
+                                    //credentials.set('sender', document.getElementById('sender_username').value);
+                                    //credentials.set('message', document.getElementById('reply_content').value);
+                                    //credentials.set('receiver', document.getElementById('receiver_username').value);
+                                    //credentials.set('action', 'send');
+                        // String Method
+                                    let sender = document.getElementById('sender_username').value;
+                                    let message = document.getElementById('reply_content').value;
+                                    let receiver = document.getElementById('receiver_username').value;
+                                    let action = "send";
+
+            // xhr.send("sender=rppt&receiver=amin&message=23123&action=send"); 
+            var params = `sender=${sender}&message=${message}&receiver=${receiver}&action=${action}`;
+            xhr.send(params); 
+            document.getElementById('reply_content').value = "";
+            // alert(credentials.get('sender'));
+        }
+        {# function sendReply() {
+                                    let sender = document.getElementById('sender_username').value;
+                                    let message = document.getElementById('reply_content').value;
+                                    let receiver = document.getElementById('receiver_username').value;
+                                    let action = "send";
+
+        var params = `sender=${sender}&message=${message}&receiver=${receiver}&action=${action}`;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "/Src/Service/chat_manager.php");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState>3 && xhr.status==200)
+                alert("the request has finished");
+        };
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(params);
+        return xhr;
+    } #}
+    </script>
+{% endblock %}

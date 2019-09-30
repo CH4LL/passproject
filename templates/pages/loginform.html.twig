@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Please log in{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="/public/subpages/loginform.css">
+{% endblock %}
+{% block body %}
+<main>
+    <section class="main-section">
+        <h1 class="login-header">Please type in username and password</h1>
+        <form class="login-form" action="/public/user/login" method="POST">
+            <input class="login-input colored-input-style" type="text" placeholder="username" name="username" ></input>
+            <input class="login-input colored-input-style" type="password" placeholder="password" name="password"></input>
+            <!-- Captcha --> 
+            <div class="login-input" min-height="50px">
+                {{ createCaptchaImage() }}
+                <img id="captcha" src="/public/resources/captchaImage.jpeg" alt="please wait" />
+            </div>
+            
+            <button onclick="reloadCaptcha();" id="reload-captcha">Give me another link</button>
+            <input placeholder="please verify" class="login-input colored-input-style" type="text" name="captcha_code" size="10" maxlength="6" />
+            <!-- Captcha -->
+            <input class="choice-button" type="submit" value="Log in"></input>
+        </form>
+    </section>
+</main>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        function reloadCaptcha(){
+            {{ createCaptchaImage() }}
+        }
+    </script>
+{% endblock %}
