@@ -18,7 +18,7 @@ the features:
       - Open command line for windows
       - Open Notepad for Windows
       - Log out back to the login panel
-Not fully implemented features:
+future features:
   - In the control panel:
     - display logged in users
     - allow for instant communication (chat) between users (integrated with AJAX)
